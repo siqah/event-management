@@ -4,16 +4,12 @@ dotenv.config();
 
 
 const pool = new pg.Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'event_manager',
-    password: 'postgres', // Replace with your actual password
-    port: 5432,
-    // user: process.env.DB_USER,
-    // host: process.env.DB_HOST,
-    // database: process.env.DB_NAME,
-    // password: process.env.DB_PASSWORD,
-    // port: process.env.DB_PORT,
+
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 });
 
 export default pool;
@@ -32,7 +28,7 @@ const createTables = async () => {
                 name VARCHAR(100) NOT NULL,
                 email VARCHAR(100) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
-                role VARCHAR(100) DEFAULT 'USER' NOT NULL CHECK(role IN ('USER', 'ADMIN'))
+                role VARCHAR(100) DEFAULT 'user' NOT NULL CHECK( LOWER(role) IN ('user', 'admin'))
             )`;
 
         const createEventsTable = `
@@ -55,16 +51,14 @@ const createTables = async () => {
                 tickets_booked INT NOT NULL
             )`;
 
-        await pool.query(createUsersTable);
-        await pool.query(createEventsTable);
-        await pool.query(createBookingsTable);
+        await pool.query(createUsersTable)
+        await pool.query(createEventsTable)
+        await pool.query(createBookingsTable)
 
         console.log('Tables created successfully');
     } catch (err) {
         console.error('Error creating tables:', err);
-    } finally {
-        await pool.end();
-    }
+    } 
 };
 
 createTables();

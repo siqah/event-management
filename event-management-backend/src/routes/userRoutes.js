@@ -1,4 +1,7 @@
 import express from 'express';
+const router = express.Router();
+import authorizeRole from '../middleware/authorizeRole.js';
+
 import {
   createUser,
   getUsers,
@@ -8,13 +11,12 @@ import {
   loginUser,
 } from '../controllers/users.js';
 
-const router = express.Router();
 
-router.post('/register', createUser);
+router.post('/register', createUser, );
 router.post('/login', loginUser);
-router.get('/', getUsers);
-router.get('/:id', getUserById);
+router.get('/',   getUsers );
+router.get('/:id', authorizeRole('ADMIN'), getUserById,);
 router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+router.delete('/:id', deleteUser, );
 
 export default router;

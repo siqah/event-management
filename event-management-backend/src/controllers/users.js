@@ -23,11 +23,12 @@ export const createUser = async (req, res) => {
   if (!name || !email || !password || !role) {
     return res.status(400).json({ error: 'All fields are required' });
   }
+  const userRole = role || 'user';
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = 'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *';
-    const user = await queryDb(query, [name, email, hashedPassword, role]);
+    const user = await queryDb(query, [name, email, hashedPassword, userRole]);
     res.status(201).json(user[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -37,10 +38,6 @@ export const createUser = async (req, res) => {
 // Get All Users
 export const getUsers = async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access only' });
-    }
-
     const users = await queryDb('SELECT id, name, email, role FROM users', []);
     res.status(200).json(users);
   } catch (error) {
