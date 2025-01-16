@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import userRoutes from "./routes/userRoutes.js"; // Include .js extension for ES Modules
-
+import userRoutes from "./routes/userRoutes.js"; 
+import eventRoutes from "./routes/eventRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -15,6 +16,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/users", userRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
