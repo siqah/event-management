@@ -15,9 +15,9 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 // Routes
-app.use("/api/user", userRoutes);
-app.use("/api/event", eventRoutes);
-app.use("/api/booking", bookingRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

@@ -39,8 +39,8 @@ const createTables = async () => {
                 location VARCHAR(100) NOT NULL,
                 date DATE NOT NULL,
                 tickets_available INT NOT NULL,
-                creator_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-                price INT NOT NULL
+                price INT NOT NULL,
+                creator_name VARCHAR(100) NOT NULL
             )`;
 
         const createBookingsTable = `

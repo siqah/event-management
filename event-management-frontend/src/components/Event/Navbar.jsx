@@ -1,10 +1,10 @@
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FaSearch, FaUserCircle,FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div className="w-full">
-      <nav className="bg-blue-200 p-4 shadow-md rounded-md mb-2">
+      <nav className="bg-indigo-800 p-4 shadow-md rounded-md mb-2">
         <div className="container mx-auto flex items-center justify-between">
           <div className="text-white text-xl font-bold">
             <span className="hidden sm:block">M-Event</span>
@@ -28,7 +28,8 @@ const Navbar = () => {
 
           <div className="text-white flex items-center space-x-4">
             <Link to="/eventscreationpage">
-              <button className="bg-blue-950 p-1 rounded-md">CreateEvent</button>
+              <button className="bg-blue-950 p-1 rounded-md hidden sm:block">CreateEvent</button>
+              <FaPlus className="block sm:hidden" size={24} />
             </Link>
             <FaUserCircle size={24} />
           </div>

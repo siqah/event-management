@@ -1,14 +1,17 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useEventContext } from "../../contexts/EventContext";
 
 const EventCreationPage = () => {
+  const { createEvent } = useEventContext(); // Access the createEvent function from context
   const [eventData, setEventData] = useState({
     title: "",
     date: "",
     location: "",
     description: "",
-    ticketsAvailable: "",
-    creatorId: "",
+    tickets_Available: "",
     price: "",
+    creator_Name: "",
   });
 
   const handleInputChange = (e) => {
@@ -19,22 +22,8 @@ const EventCreationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/event/createEvent",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(eventData),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create event");
-      }
-
-      const data = await response.json();
+      await createEvent(eventData); // Use the context function to create the event
       alert("Event created successfully!");
-      console.log("Response:", data);
 
       // Clear the form after successful submission
       setEventData({
@@ -42,20 +31,34 @@ const EventCreationPage = () => {
         date: "",
         location: "",
         description: "",
-        ticketsAvailable: "",
-        creatorId: "",
+        tickets_Available: "",
         price: "",
+        creator_Name: "",
       });
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error creating event:", error);
       alert("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <>
-      <form className="space-y-4 w-300 justify-center items-center" onSubmit={handleSubmit} >
-        <h2 className="text-2xl font- justify-center items-center">Create Event</h2>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <form
+        className="space-y-6 bg-white p-6 rounded-lg shadow-lg w-full max-w-md"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex space-x-8 items-center">
+          <button>
+            <Link to="/" className="text-gray-800">
+              Home
+            </Link>
+          </button>
+
+          <h2 className="text-2xl font-bold text-center text-gray-800">
+            Create Event
+          </h2>
+        </div>
+
         <div>
           <label
             htmlFor="title"
@@ -71,6 +74,7 @@ const EventCreationPage = () => {
             onChange={handleInputChange}
             required
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter event title"
           />
         </div>
         <div>
@@ -105,6 +109,7 @@ const EventCreationPage = () => {
             onChange={handleInputChange}
             required
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter event location"
           />
         </div>
         <div>
@@ -120,8 +125,9 @@ const EventCreationPage = () => {
             value={eventData.description}
             onChange={handleInputChange}
             required
-            rows={3}
+            rows={4}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Provide a brief description"
           />
         </div>
         <div>
@@ -134,28 +140,13 @@ const EventCreationPage = () => {
           <input
             type="number"
             id="ticketsAvailable"
-            name="ticketsAvailable"
-            value={eventData.ticketsAvailable}
+            name="tickets_Available"
+            value={eventData.tickets_Available}
             onChange={handleInputChange}
             required
+            min={1}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="creatorId"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Creator ID
-          </label>
-          <input
-            type="number"
-            id="creatorId"
-            name="creatorId"
-            value={eventData.creatorId}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter number of tickets"
           />
         </div>
         <div>
@@ -172,17 +163,37 @@ const EventCreationPage = () => {
             value={eventData.price}
             onChange={handleInputChange}
             required
+            min={0}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter ticket price"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="creatorName"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Your Name
+          </label>
+          <input
+            type="text"
+            id="creatorName"
+            name="creator_Name"
+            value={eventData.creator_Name}
+            onChange={handleInputChange}
+            required
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter your name you want to display as creator"
           />
         </div>
         <button
           type="submit"
-          className="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Create Event
         </button>
       </form>
-    </>
+    </div>
   );
 };
 
